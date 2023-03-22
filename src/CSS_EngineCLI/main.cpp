@@ -6,6 +6,6 @@ int main()
 	css::String world = "world";
 	css::String helloWorld(hello + " " + world + "!");
 	std::cout << helloWorld << std::endl;
-	
+
 	return 0;
 }
