@@ -45,7 +45,7 @@ int main() {
                 css::String input = inputBuffer.GetRawData();
                 inputBuffer = InputBuffer();
                 if (input.Count(',') > 2) {  // brak zlosliwych danych, mhm, jasne
-                    input = input.GetSubstring(input.Find(',') + 2, input.GetLength());
+                    continue;
                 }
                 auto commandStrings = splitCommand(input);
                 if (streq(commandStrings[1].GetData(), "D")) {
