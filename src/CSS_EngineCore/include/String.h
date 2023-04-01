@@ -16,6 +16,7 @@ class String
     String GetSubstring(std::size_t start, std::size_t end) const;
     int Find(char c) const;
     int FindLast(char c) const;
+    std::size_t Count(char c) const;
     bool operator==(const String& rhs) const;
     bool operator!=(const String& rhs) const;
     String operator+(const String& rhs) const;

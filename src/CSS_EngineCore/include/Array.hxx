@@ -1,6 +1,6 @@
 #pragma once
 #include <cstddef>
-#include <stdexcept>
+#include <cstdlib>
 
 namespace css {
 
@@ -20,8 +20,10 @@ class Array
     }
 
     Array(Array&& rhs) : _occupied(rhs._occupied), _data() {
+        for (std::size_t i = 0; i < _occupied; i++) {
+            _data[i] = (T &&)(rhs._data[i]);
+        }
         rhs._occupied = 0;
-        std::swap(_data, rhs._data);
     }
 
     ~Array() = default;
@@ -50,7 +52,7 @@ class Array
             throw;
         }
 
-        _data[_occupied] = std::move(data);
+        _data[_occupied] = (T &&)(data);
         _occupied++;
     }
 
@@ -69,7 +71,7 @@ class Array
 
         _occupied--;
         for (std::size_t i = index; i < _occupied; i++) {
-            _data[i] = std::move(_data[i + 1]);
+            _data[i] = (T &&)(_data[i + 1]);
         }
     }
 
@@ -83,7 +85,7 @@ class Array
 
     const T& operator[](std::size_t index) const {
         if (index >= _occupied) {
-            throw std::out_of_range("Index out of Array range");
+            std::exit(EXIT_FAILURE);
         }
 
         return _data[index];
@@ -91,22 +93,30 @@ class Array
 
     T& operator[](std::size_t index) {
         if (index >= _occupied) {
-            throw std::out_of_range("Index out of Array range");
+            std::exit(EXIT_FAILURE);
         }
 
         return _data[index];
     }
 
     Array& operator=(const Array& rhs) {
-        Array tmp = rhs;
-        std::swap(_occupied, tmp._occupied);
-        std::swap(_data, tmp._data);
+        _occupied = rhs._occupied;
+        for (std::size_t i = 0; i < rhs._occupied; i++) {
+            _data[i] = rhs._data[i];
+        }
         return *this;
     }
 
     Array& operator=(Array&& rhs) {
-        std::swap(_occupied, rhs._occupied);
-        std::swap(_data, rhs._data);
+        T tmpData;
+        for (std::size_t i = 0; i < N; i++) {
+            tmpData = (T &&)(_data[i]);
+            _data[i] = (T &&)(rhs._data[i]);
+            rhs._data[i] = (T &&)(tmpData);
+        }
+        std::size_t tmpOccupied = _occupied;
+        _occupied = rhs._occupied;
+        rhs._occupied = tmpOccupied;
         return *this;
     }
 

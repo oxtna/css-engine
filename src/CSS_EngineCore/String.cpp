@@ -1,5 +1,6 @@
 #include "String.h"
-#include <stdexcept>
+#include "Swap.hxx"
+#include <cstdlib>
 
 namespace css {
 
@@ -77,6 +78,17 @@ int String::FindLast(char c) const {
     return -1;
 }
 
+std::size_t String::Count(char c) const {
+    std::size_t count = 0;
+    for (std::size_t i = 0; i < _length; i++) {
+        if (_data[i] == c) {
+            count++;
+        }
+    }
+
+    return count;
+}
+
 bool String::operator==(const String& rhs) const {
     if (_data == nullptr && rhs._data == nullptr) {
         return true;
@@ -115,7 +127,7 @@ String String::operator+(const String& rhs) const {
 
 char String::operator[](const std::size_t index) const {
     if (index >= _length) {
-        throw std::out_of_range("Index out of String range");
+        std::exit(EXIT_FAILURE);
     }
 
     return _data[index];
@@ -123,14 +135,14 @@ char String::operator[](const std::size_t index) const {
 
 String& String::operator=(const String& rhs) {
     String tmp = rhs;
-    std::swap(_length, tmp._length);
-    std::swap(_data, tmp._data);
+    Swap(_length, tmp._length);
+    Swap(_data, tmp._data);
     return *this;
 }
 
 String& String::operator=(String&& rhs) {
-    std::swap(_length, rhs._length);
-    std::swap(_data, rhs._data);
+    Swap(_length, rhs._length);
+    Swap(_data, rhs._data);
     return *this;
 }
 

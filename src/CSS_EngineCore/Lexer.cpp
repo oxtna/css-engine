@@ -1,31 +1,32 @@
 #include "Lexer.h"
+#include "Swap.hxx"
 
 namespace css {
 
 Lexer::Lexer(const String& text) : _text(text), _index(0) {
 }
 
-Lexer::Lexer(String&& text) : _text(std::move(text)), _index(0) {
+Lexer::Lexer(String&& text) : _text((String &&)(text)), _index(0) {
 }
 
 Lexer::Lexer(const Lexer& rhs) : _text(rhs._text), _index(rhs._index) {
 }
 
-Lexer::Lexer(Lexer&& rhs) : _text(std::move(rhs._text)), _index(rhs._index) {
+Lexer::Lexer(Lexer&& rhs) : _text((String &&)(rhs._text)), _index(rhs._index) {
     rhs._text = String();
     rhs._index = 0;
 }
 
 Lexer& Lexer::operator=(const Lexer& rhs) {
     Lexer tmp = rhs;
-    std::swap(_text, tmp._text);
-    std::swap(_index, tmp._index);
+    Swap(_text, tmp._text);
+    Swap(_index, tmp._index);
     return *this;
 }
 
 Lexer& Lexer::operator=(Lexer&& rhs) {
-    std::swap(_text, rhs._text);
-    std::swap(_index, rhs._index);
+    Swap(_text, rhs._text);
+    Swap(_index, rhs._index);
     return *this;
 }
 

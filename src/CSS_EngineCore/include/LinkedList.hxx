@@ -1,6 +1,7 @@
 #pragma once
+#include "Swap.hxx"
 #include <cstddef>
-#include <stdexcept>
+#include <cstdlib>
 
 namespace css {
 
@@ -16,10 +17,10 @@ class LinkedList
         Node(const T& data, Node* previous)
             : _data(data), _prev(previous), _next(nullptr) {}
 
-        Node(T&& data) : _data(std::move(data)), _prev(nullptr), _next(nullptr) {}
+        Node(T&& data) : _data((T &&)(data)), _prev(nullptr), _next(nullptr) {}
 
         Node(T&& data, Node* previous)
-            : _data(std::move(data)), _prev(previous), _next(nullptr) {}
+            : _data((T &&)(data)), _prev(previous), _next(nullptr) {}
 
         Node* GetPrevious() const { return _prev; }
 
@@ -33,7 +34,7 @@ class LinkedList
 
         void SetData(const T& data) { _data = data; }
 
-        void SetData(T&& data) { _data = std::move(data); }
+        void SetData(T&& data) { _data = (T &&)(data); }
 
       private:
         T _data;
@@ -150,11 +151,11 @@ class LinkedList
 
     void Add(T&& data) {
         if (_first == nullptr) {
-            _first = new Node(std::move(data));
+            _first = new Node((T &&)(data));
             _last = _first;
         }
         else {
-            _last->SetNext(new Node(std::move(data), _last));
+            _last->SetNext(new Node((T &&)(data), _last));
             _last = _last->GetNext();
         }
 
@@ -196,22 +197,22 @@ class LinkedList
 
     LinkedList& operator=(const LinkedList& rhs) {
         LinkedList tmp = rhs;
-        std::swap(_length, tmp._length);
-        std::swap(_first, tmp._first);
-        std::swap(_last, tmp._last);
+        Swap(_length, tmp._length);
+        Swap(_first, tmp._first);
+        Swap(_last, tmp._last);
         return *this;
     }
 
     LinkedList& operator=(LinkedList&& rhs) {
-        std::swap(_length, rhs._length);
-        std::swap(_first, rhs._first);
-        std::swap(_last, rhs._last);
+        Swap(_length, rhs._length);
+        Swap(_first, rhs._first);
+        Swap(_last, rhs._last);
         return *this;
     }
 
     T& operator[](std::size_t index) const {
         if (index >= _length) {
-            throw std::out_of_range("Index out of Linked List range");
+            std::exit(EXIT_FAILURE);
         }
         else if (index < _length / 2) {
             Node* current = _first;

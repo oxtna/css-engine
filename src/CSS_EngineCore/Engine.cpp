@@ -66,7 +66,7 @@ void Engine::Parse(const String& str) {
 }
 
 void Engine::Parse(String&& str) {
-    _lexer = Lexer(std::move(str));
+    _lexer = Lexer((String &&)(str));
     _Parse();
 }
 
@@ -275,7 +275,7 @@ void Engine::_Parse() {
                 (previousToken.GetType() == TokenType::String ||
                  previousToken.GetType() == TokenType::Semicolon ||
                  previousToken.GetType() == TokenType::OpeningBrace)) {
-                _AddSection(std::move(section));
+                _AddSection((Section &&)(section));
                 section = Section();
             }
             else
@@ -299,12 +299,12 @@ void Engine::_Parse() {
                 currentToken.GetType() == TokenType::Semicolon ||
                 currentToken.GetType() == TokenType::ClosingBrace) {
                 attribute.value = _lexer.GetSubstring(startingIndex, endingIndex);
-                section.AddAttribute(std::move(attribute));
+                section.AddAttribute((Attribute &&)(attribute));
                 attribute = Attribute();
             }
 
             if (currentToken.GetType() == TokenType::ClosingBrace) {
-                _AddSection(std::move(section));
+                _AddSection((Section &&)(section));
                 section = Section();
             }
         }
@@ -332,7 +332,7 @@ void Engine::_AddSection(Section&& section) {
         _list.Add(SectionArray());
     }
     auto& lastSectionArray = _list[_list.GetLength() - 1];
-    lastSectionArray.Add(std::move(section));
+    lastSectionArray.Add((Section &&)(section));
 }
 
 }

@@ -1,4 +1,5 @@
 #include "Section.h"
+#include "Swap.hxx"
 
 namespace css {
 
@@ -7,7 +8,8 @@ Section::Section(const Section& rhs)
 }
 
 Section::Section(Section&& rhs)
-    : _selectors(std::move(rhs._selectors)), _attributes(std::move(rhs._attributes)) {
+    : _selectors((LinkedList<String> &&)(rhs._selectors)),
+      _attributes((LinkedList<Attribute> &&)(rhs._attributes)) {
     rhs._selectors = LinkedList<String>();
     rhs._attributes = LinkedList<Attribute>();
 }
@@ -63,7 +65,7 @@ void Section::AddSelector(const String& selector) {
 }
 
 void Section::AddSelector(String&& selector) {
-    _selectors.Add(std::move(selector));
+    _selectors.Add((String &&)(selector));
 }
 
 void Section::AddAttribute(const Attribute& attribute) {
@@ -80,12 +82,12 @@ void Section::AddAttribute(const Attribute& attribute) {
 void Section::AddAttribute(Attribute&& attribute) {
     for (auto& attr : _attributes) {
         if (attr.name == attribute.name) {
-            attr.value = std::move(attribute.value);
+            attr.value = (String &&)(attribute.value);
             return;
         }
     }
 
-    _attributes.Add(std::move(attribute));
+    _attributes.Add((Attribute &&)(attribute));
 }
 
 void Section::RemoveAttribute(const String& attributeName) {
@@ -99,14 +101,14 @@ void Section::RemoveAttribute(const String& attributeName) {
 
 Section& Section::operator=(const Section& rhs) {
     Section tmp = rhs;
-    std::swap(_selectors, tmp._selectors);
-    std::swap(_attributes, tmp._attributes);
+    Swap(_selectors, tmp._selectors);
+    Swap(_attributes, tmp._attributes);
     return *this;
 }
 
 Section& Section::operator=(Section&& rhs) {
-    std::swap(_selectors, rhs._selectors);
-    std::swap(_attributes, rhs._attributes);
+    Swap(_selectors, rhs._selectors);
+    Swap(_attributes, rhs._attributes);
     return *this;
 }
 

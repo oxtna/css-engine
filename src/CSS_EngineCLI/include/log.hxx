@@ -7,5 +7,5 @@ void log(const css::String& command, const T& output) {
 
 template <typename T>
 void log(const css::String& command, T&& output) {
-    std::cout << command << " == " << std::move(output) << std::endl;
+    std::cout << command << " == " << (T &&)(output) << std::endl;
 }

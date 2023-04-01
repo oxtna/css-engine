@@ -47,9 +47,9 @@ css::Array<css::String, 3> splitCommand(const css::String& str) {
             withoutFirst.Find(',') + 1, withoutFirst.GetLength());
     }
 
-    array.Add(std::move(first));
-    array.Add(std::move(second));
-    array.Add(std::move(last));
+    array.Add((css::String &&)(first));
+    array.Add((css::String &&)(second));
+    array.Add((css::String &&)(last));
     return array;
 }
 
