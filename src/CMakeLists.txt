@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.19)
 
 project(CSS_Engine
 	VERSION 0.1.0
-	DESCRIPTION "CSS Engine that interprets CSS markup and executes commands"
+	DESCRIPTION "CSS Engine that interprets CSS and executes commands"
 	LANGUAGES CXX
 )
 
