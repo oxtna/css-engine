@@ -44,8 +44,8 @@ int main() {
                 inputBuffer[inputBuffer.GetLength() - 1] = '\0';
                 css::String input = inputBuffer.GetRawData();
                 inputBuffer = InputBuffer();
-                if (input.Count(',') > 2) {
-                    input = input.GetSubstring(input.Find(',') + 1, input.GetLength());
+                if (input.Count(',') > 2) { // brak zlosliwych danych, mhm, jasne
+                    input = input.GetSubstring(input.Find(',') + 2, input.GetLength());
                 }
                 auto commandStrings = splitCommand(input);
                 if (streq(commandStrings[1].GetData(), "D")) {
